@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<title>My Budget App</title>
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- Bootstrap core CSS -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+		<!-- Material Design Bootstrap -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet">
+		
+    </head>
+    <style>
+        body{
+	background: #e9e9ed;
+}
+.top {
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	height: 470px;
+}
+.budget {
+	color: #fff;
+	width: 500px;
+}
+.budget__value {
+	font-weight: 300;
+	font-size: 46px;
+	margin-bottom: 10px;
+	letter-spacing: 2px;
+}
+.budget__income {
+	margin-bottom: 10px;
+	
+}
+
+.budget__income, .budget__expenses {
+	padding: 12px;
+	text-transform: uppercase;
+}
+.content-center {
+	display: flex;
+	justify-content: center;
+}
+.budget__expenses--percentage {
+	width: 34px;
+	font-size: 11px;
+	padding: 5px 5px 5px 5px;
+	margin-left: 10px;
+	background-color: rgba(255, 255, 255, 0.2);
+	text-align: center;
+	border-radius: 3px;
+	font-weight: 300;
+}
+.budget__income--percentage {
+	width: 34px;
+	font-size: 11px;
+	padding: 5px 5px 5px 5px;
+	margin-left: 10px;
+	text-align: center;
+	border-radius: 3px;
+	font-weight: 300;
+}
+.budget__income--value, .budget__expenses--value {
+	letter-spacing: 1px;
+	font-weight: 400;
+}
+.box-shadow {
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+
+}
+.btn-floating {
+	width: 47px;
+	height: 47px;
+	position: relative;
+	z-index: 1;
+	vertical-align: middle;
+	display: inline-block;
+	overflow: hidden;
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+	margin: 10px;
+	border-radius: 50%;
+	padding: 0;
+	cursor: pointer;
+}
+.item {
+	padding: 13px;
+	border-bottom: 1px solid #e7e7e7;
+}
+
+.item:first-child { border-top: 1px solid #e7e7e7; }
+.item:nth-child(even) { background-color:#efefef; }
+
+.item__description {
+	float: left;
+}
+
+.item__value {
+	float: left;
+	transition: transform 0.3s;
+}
+
+.item__percentage {
+	float: left;
+	margin-left: 20px;
+	transition: transform 0.3s;
+	font-size: 11px;
+	background-color: #FFDAD9;
+	padding: 3px;
+	border-radius: 3px;
+	width: 32px;
+	text-align: center;
+}
+
+.income .item__value,
+.income .item__delete--btn {
+	color: #28B9B5;
+}
+
+.expenses .item__value,
+.expenses .item__percentage,
+.expenses .item__delete--btn {
+	color: #FF5049;
+}
+
+
+.item__delete {
+	float: left;
+}
+
+.item__delete--btn {
+	font-size: 22px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 1;
+	display: none;
+}
+
+.item__delete--btn:focus { outline: none; }
+.item__delete--btn:active { transform: translateY(2px); }
+
+.item:hover .item__delete--btn { display: block; }
+.item:hover .item__value { transform: translateX(-20px); }
+.item:hover .item__percentage { transform: translateX(-20px); }
+
+
+.unpaid {
+	background-color: #FFDAD9 !important;
+	cursor: pointer;
+	color: #FF5049;
+
+}
+
+.unpaid .item__percentage { box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1); }
+.unpaid:hover .item__description { font-weight: 900; }
+
+icome, h3 {
+	text-transform: uppercase;
+}
+expense, h3 {
+	text-transform: uppercase;
+}
+
+.btn-outline-success {
+	border-color: #e0e0e0!important;
+}
+.btn-outline-danger {
+	border-color: #e0e0e0!important;
+}
+input[type=text]:focus:not([readonly]) + label {
+	color: green; 
+}
+
+.text-input>input[type=text]:focus:not([readonly]) {
+	border-bottom: 1px solid green;
+	box-shadow: 0 1px 0 0 green; 
+}
+
+.navbar form input {
+	margin: 0 0 0 0 !important;
+}
+
+.waves-input-wrapper{
+	display: flex;
+}
+
+.list {
+	opacity: 1;
+	-webkit-transition: opacity 1000ms linear;
+	transition: opacity 1000ms linear;
+}
+
+.loader {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	z-index: 1;
+	width: 150px;
+	height: 150px;
+	margin: -75px 0 0 -75px;
+	border: 16px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 16px solid #3498db;
+	width: 120px;
+	height: 120px;
+	-webkit-animation: spin 2s linear infinite;
+	animation: spin 2s linear infinite;
+  }
+  
+  @-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+  }
+  .backdrop{
+	background: rgba(255, 255, 255, 0.5);
+	overflow: hidden;
+	height: 100%;
+	z-index: 2;
+	width: 100%;
+	position: absolute;
+	display: block;
+  }
+  .date_timestamp {
+	  font-size: 12px;
+  }
+  .green_desc:focus {
+	border-bottom: 1px solid #00c851 !important;
+	box-shadow: 0 1px 0 0 #00c851 !important;
+  }
+  .green_val:focus {
+	border-bottom: 1px solid #00c851 !important;
+	box-shadow: 0 1px 0 0 #00c851 !important;
+  }
+  .red_desc:focus {
+	border-bottom: 1px solid #fe3547 !important;
+	box-shadow: 0 1px 0 0 #fe3547 !important;
+  }
+  .red_val:focus {
+	border-bottom: 1px solid #fe3547 !important;
+	box-shadow: 0 1px 0 0 #fe3547 !important;
+  }
+  #datePicker {
+	border: 2px solid #33b5e5;
+	color: #eff5f7 !important;
+	background-color: #1a495a;
+	border-radius: 2px;
+	-webkit-transition: .2s ease-out;
+	transition: .2s ease-out;
+	white-space: normal!important;
+	cursor: pointer;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+	text-transform: uppercase;
+	text-align: -webkit-right !important;
+	text-align: center;
+	padding: 5px;
+  }
+  #datePicker:hover {
+	  border-color: #8bc34a;
+  }
+  .navbar{
+	  box-shadow: none;
+  }
+  .list_content {
+	bottom: 104px;
+	background-color: #fbfbfb;
+  }
+    </style>
+	<body>
+		<div class="top">
+		<div class="container content-center py-4">
+			<div class="budget my-auto animated fadeInUp">
+			<div class="col text-center">
+				<div class="budget__title">
+				<h5>Available Budget in <b>₹</b></h5>
+				<input id="datePicker" class="mb-3" type="month" value="2018-06" max="2018-06" min="2013-06">
+			</div> 
+			<div class="budget__value">
+				<h1>+ </h1>
+			</div>
+		</div>
+		<div class="col">  
+			<div class="budget__income clearfix box-shadow rounded success-color waves-effect waves-light" id="inc-tab" data-toggle="modal" data-target="#incChartModal">
+				<div class="budget__income--text float-left"><b>Income(+₹)</b></div>
+				<div class="right float-right">
+					<div class="budget__income--percentage float-right"></div>
+					<div class="budget__income--value float-right">+ </div>
+				</div>
+			</div>
+			
+			<div class="budget__expenses clearfix box-shadow rounded danger-color waves-effect waves-light " id="exp-tab" data-toggle="modal" data-target="#expChartModal">
+				<div class="budget__expenses--text float-left"><b>Expenses(-₹)</b></div>
+				<div class="right clearfix">
+					<div class="budget__expenses--percentage float-right"></div>
+					<div class="budget__expenses--value float-right">- </div>
+					
+				</div>
+				</div>
+			</div>
+		   </div>
+		   <!-- Income-Chart-Modal -->
+			<div class="modal fade" id="incChartModal" tabindex="-1" role="dialog" aria-labelledby="incChartModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Income</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<canvas id="incPieChart"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Income-Chart-Modal -->
+			<div class="modal fade" id="expChartModal" tabindex="-1" role="dialog" aria-labelledby="expChartModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Expense</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<canvas id="expPieChart"></canvas>
+						</div>
+						<!-- <div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary">Save changes</button>
+						</div> -->
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="card list_content animated slideInLeft">
+		<nav class="navbar mb-1 mt-2">
+			<div class="container">
+			  <div class="mx-auto" style="width: 100%;">
+				<form  onsubmit="return false" name="panel">
+				<div class="form-row">
+					<div class="col-lg-3 my-auto">
+
+						<div class="btn-group content-center radio-group" data-toggle="buttons">
+
+							
+								<label id="inc" class="btn btn-outline-success outline-gray-text mx-2 btn-md dc-panel-remove form-check-label">
+										<i class="fa fa-plus ml-2"></i>
+									<input class="form-check-input" name="types" type="radio" value="inc" autocomplete="off" required  >Income
+								</label>
+							
+								<label id="exp" class="btn btn-outline-danger outline-gray-text mx-2 btn-md dc-panel-remove form-check-label">
+										<i class="fa fa-minus ml-2"></i>
+									<input class="form-check-input" name="types" type="radio" value="exp" autocomplete="off" required >Expense
+								</label>
+							
+							</div>
+
+					</div>
+						<div class="col-lg-5" >
+							<div class="md-form">
+							<input type="text" id="input__description" class="form-control" required placeholder="Add description" >
+							
+							</div>
+						</div>
+						
+						
+						<div class="col-lg-2">
+							<div class="md-form mb-3">
+							<input type="number" id="input__value" class="form-control" required placeholder="Value" >
+							
+							</div>
+						</div>
+						
+						<div class="col-lg-2 my-auto"> 
+						<button type="submit" id="submit-button" class="btn btn-success btn-block rounded my-auto">Submit</button>
+						</div>
+					</div>
+					</form>
+				</div>
+			</div>
+		</nav>
+		<hr>
+		
+		<div class="bottom">
+			
+			<div class="container clearfix my-5" id="data-list">
+				<div class="row">
+					<div class="col-lg">
+						<div class="income mb-4">
+							<h3 class="icome__title text-success">Income (+₹)</h3>
+							
+							<div class="income__list">
+								
+							</div>
+						</div>
+					</div>
+					
+					
+					
+					<div class="col-lg"> 
+						<div class="expenses">
+							<h3 class="expenses__title text-danger">Expense (-₹)</h3>
+							
+							<div class="expenses__list">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			 </div>
+		</div>
+	</div>
+	<div class="container">
+	<footer class="text-center text-mute" style="font-size: 14px;">
+			<p>Credit goes to <a href="http://codingheroes.io/" target="_blank">Mohammad Faisal</a> for inspiring me to use vanilla JS, <a href="https://mdbootstrap.com/" target="_blank">Material Design for Bootstrap</a> for free UI-Kit, <br/><a href="http://www.amongtech.com/download-android-5-0-lollipop-google-calendar-wallpapers/" target="_blank">AmongTech</a> for Google Calendar Backgrounds, and ofcourse <a href="https://firebase.google.com/" target="_blank">Firebase</a>.</p>
+			<p>Made with <i class="fa fa-coffee text-danger"></i>&nbsp;and&nbsp;<i class="fa fa-music text-success"></i> by <a class="text-primary" href="http://youtube.com/farhankk360/" target="_blank">Mohammad Faisal</a>.</p>
+		</footer>
+	</div>
+
+	<!-- SCRIPTS -->
+	<script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function(event) {
+//FIRE BASE DATABASE CONTROLLER
+  
+const config = {
+	apiKey: "AIzaSyBFIP12ClnYbKPEI9YhTM823qdWThHh1mg",
+	authDomain: "md-budget.firebaseapp.com",
+	databaseURL: "https://md-budget.firebaseio.com",
+	projectId: "md-budget",
+	storageBucket: "",
+	messagingSenderId: "1065623851959"
+  };
+   firebase.initializeApp(config);
+   
+
+var date = new Date;
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var year = date.getFullYear();
+var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+var month = months[date.getMonth()];
+var datePicker = document.querySelector('input[type="month"]');
+
+const db = firebase.database();
+var budgetDataRef = db.ref('/budget_data');
+
+var budgetRef = db.ref('budget_data/'+year+'/'+month);
+var incRef = db.ref('budget_data/'+year+'/'+month+'/inc');
+var expRef = db.ref('budget_data/'+year+'/'+month+'/exp');
+
+
+	//BUDGET CONTROLLER
+var budgetController = (function(){
+
+	var Expense = function(id, description, value, timeStamp) {
+		this.id = id;
+		this.description = description;
+		this.value = value;
+		this.timeStamp = timeStamp;
+	};
+
+	var calcPercentage = function(totalIncome, cur) {
+		if(totalIncome > 0){
+			 this.percentage = Math.round((cur.value / totalIncome) * 100);
+			
+		} else {
+			 this.percentage = -1;
+		}
+	   
+	};
+
+	var getPercentage = function(){
+		return this.percentage;
+	};
+
+	var Income = function(id, description, value, timeStamp) {
+		this.id = id;
+		this.description = description;
+		this.value = value;
+		this.timeStamp = timeStamp;
+	};
+	
+	var calculateTotal = function(type){
+		var sum = 0;
+		data.allItems[type].forEach(function(curr){
+			sum += curr.value;
+		});
+		data.totals[type] = sum;
+	};
+
+	var data = {
+		allItems: {
+			exp: [],
+			inc: []
+		},
+		totals: {
+			exp: 0,
+			inc: 0
+		},
+		budget: 0,
+		percentage: -1
+	};
+
+var calculateBudget = function(){
+		  
+	//Total income and expenses
+	calculateTotal('exp');
+	calculateTotal('inc');
+	
+	//Calculate the budget income - expenses
+	data.budget = data.totals.inc - data.totals.exp;
+
+	
+
+	//Calculate the percentage of income that is spent
+	if(data.totals.inc > 0){
+	  data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+	} else {
+		data.percentage = -1;
+	}
+
+  }
+
+	return {
+
+		addItem: function (type, des, val){
+			var newItem, ID, tStamp, d;
+
+			//generate random id
+			function randomID(length){
+				let text = "";
+				var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+				
+				for(let i = 0; i < length; i++)  {
+					text += possible.charAt(Math.floor(Math.random() * possible.length))
+				}
+			
+				return text
+			
+			}
+			
+			ID = randomID(6);
+			tStamp = days[date.getDay()]+" "+ months[date.getMonth()]+" "+date.getDate()+" "+date.getFullYear();
+			
+			//Create new item based on type
+			if(type === 'exp'){
+				newItem = new Expense(ID, des, val, tStamp);
+				db.ref('budget_data/'+year+'/'+month+'/'+[type]).push(newItem);
+				
+
+			} else if(type === 'inc'){
+				newItem = new Income(ID, des, val, tStamp);
+				db.ref('budget_data/'+year+'/'+month+'/'+[type]).push(newItem);
+				
+				
+			}
+
+		},
+		
+		deleteItem: function (type, id){
+			var ids, index;
+
+			ids = data.allItems[type].map(function(current){
+				return current.id;
+
+			});
+			
+			index = ids.indexOf(id);
+		   
+		   
+			if (index !== -1) {
+	
+				data.allItems[type].splice(index, 1);
+
+				db.ref('budget_data/'+year+'/'+month+'/'+[type]).once('value').then( function(snapshot){
+					var childData = snapshot.val();
+					if(childData !== null){
+						var keys = Object.keys(childData);
+
+						for (var i = 0; i < keys.length; i++) {
+							var k = keys[i];
+							if (childData[k].id === id) {
+								db.ref('budget_data/'+year+'/'+month+'/'+[type]).child(keys[i]).remove();
+							}
+	
+					};
+					}
+				   
+			});
+		  }
+		},
+		
+		calculateBudget: function(){
+		  
+		  //Total income and expenses
+		  calculateTotal('exp');
+		  calculateTotal('inc');
+		  
+		  //Calculate the budget income - expenses
+		  data.budget = data.totals.inc - data.totals.exp;
+
+		  
+
+		  //Calculate the percentage of income that is spent
+		  if(data.totals.inc > 0){
+			data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+		  } else {
+			  data.percentage = - 1;
+		  }
+
+		},
+		
+		calculatePercentages: function(){
+			data.allItems.exp.forEach(function(cur){
+
+				calcPercentage(data.totals.inc, cur);
+			});
+		},
+
+		getPercentages: function(){
+			var allPerc = data.allItems.exp.map(function(cur){
+				return cur.percentage = Math.round((cur.value / data.totals.inc) * 100);
+			});
+			return allPerc;
+		},
+
+		getBudget: function(){
+			return {
+				budget: data.budget,
+				totalInc: data.totals.inc,
+				totalExp: data.totals.exp,
+				percentage: data.percentage
+			}
+		  
+		},
+
+		retriveDBData: function(obj) {
+			var dbValues = obj.val();
+			var objKeys = Object.keys(dbValues);
+
+			for(var m = 0; m < objKeys.length; m++){
+				if(objKeys[m] === 'inc'){
+			   
+					var incChild = dbValues.inc;
+					
+					var keys = Object.keys(incChild);
+		
+					for (var i = 0; i < keys.length; i++) {
+						var k = keys[i];
+						data.allItems['inc'].unshift(incChild[k]);
+		
+						calculateTotal('inc');
+						calculateBudget();
+						
+						UIController.addListItem(incChild[k], 'inc');
+		
+						controller.updateNumbers();
+					}
+		
+					} else if (objKeys[m] === 'exp'){
+
+						var expChild = dbValues.exp;
+						var keys = Object.keys(expChild);
+			
+						for (var i = 0; i < keys.length; i++) {
+							var k = keys[i];
+							data.allItems['exp'].unshift(expChild[k]);
+			
+							calculateTotal('exp');
+							calculateBudget();
+			
+							UIController.addListItem(expChild[k], 'exp');
+							
+							controller.updateNumbers();
+						}
+							
+						}
+			}
+
+		},
+		returnLocalData: function() {
+			return data;
+			
+		},
+		addNewItemToDB: function(type, item) {
+			data.allItems[type].unshift(item);
+			calculateTotal(type);
+			calculateBudget();
+			
+			UIController.addListItem(item, type);
+			if(type === 'inc'){
+				UIController.incPieChart();	 
+			} else {
+				UIController.expPieChart(); 
+			}
+			
+			controller.updateNumbers();
+				
+		},
+		deleteItemFromDB: function (type, id){
+
+			this.deleteItem(type, id);
+			calculateTotal(type);
+			calculateBudget();
+			
+			UIController.deleteListItem(type+"-"+id);
+			if(type === 'inc'){
+				UIController.incPieChart();	 
+			} else {
+				UIController.expPieChart(); 
+			}
+			controller.updateNumbers();
+		},
+		resetLocalData: function(){
+			data = {
+				allItems: {
+					exp: [],
+					inc: []
+				},
+				totals: {
+					exp: 0,
+					inc: 0
+				},
+				budget: 0,
+				percentage: -1
+			};
+		}
+	};
+})();
+
+// UICONTROLLER
+var UIController = (function(budgetCtrl){
+	
+	var DOMstrings = {
+		inputRadio: 'types',
+		inputDescription: '#input__description',
+		inputValues: '#input__value',
+		sumbitBtn: '#submit-button',
+		incomeContainer: '.income__list',
+		expenseContainer: '.expenses__list',
+		budgetLabel: '.budget__value',
+		incomeLabel: '.budget__income--value',
+		expenseLabel: '.budget__expenses--value',
+		percentageLabel: '.budget__expenses--percentage',
+		container: 'data-list',
+		expensesPercLabel: '.item__percentage',
+		dateLabel: '.budget__title--month'
+	};
+
+	var formatNumber = function(num, type){
+	 
+	 var numSplit, int, dec;
+	 num = Math.abs(num);
+	 num = num.toFixed(2);
+
+	 numSplit = num.split('.');
+
+	 int = numSplit[0];
+	 if(int.length > 3) {
+		 int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3);
+	 
+	 }
+
+	 dec = numSplit[1];
+
+	 return (type === 'exp' ? '- ₹' : '+ ₹') + ' ' + int + '.' + dec;
+	};
+
+	var nodeListForEach = function(list, callback) {
+		for (var i = 0; i < list.length; i++) {
+			callback(list[i], i);
+		}
+	};
+ 
+   return {
+	   // PreLoader
+	   createLoader: function(){
+		   var backdrop = document.createElement("DIV");
+		   backdrop.setAttribute("id", "preLoader");
+		   backdrop.classList.add("backdrop");
+		   var preLoader = document.createElement("DIV");
+		   preLoader.classList.add("loader");
+		   var loader = backdrop.appendChild(preLoader);
+		   
+		   var body = document.body;
+		   body.insertBefore(backdrop, body.firstChild);
+	   },
+		dismissLoader: function(){
+			var child = document.getElementById("preLoader");
+			var body = document.body;
+			body.removeChild(child);
+		   
+			
+	   },
+	   
+	   getInput: function(){
+		   var selected = document.getElementsByName(DOMstrings.inputRadio);
+		   for (var i = 0, length = selected.length; i < length; i++){
+			if (selected[i].checked){
+			var selectedType = selected[i].value;
+			break;
+			}
+		}
+		  return {
+			  type: selectedType,
+			  description: document.querySelector(DOMstrings.inputDescription).value,
+			  value: parseFloat(document.querySelector(DOMstrings.inputValues).value)
+		  };
+	   },
+
+	   
+
+	   addListItem: function(obj, type){
+		var html, newHtml, element, data;
+
+		if(obj !== undefined){
+		
+		//Create HTML string with placeholder text
+		if(type === 'inc'){
+			element = DOMstrings.incomeContainer;
+			html = '<div class="item clearfix animated fadeInLeft" id="inc-%id%"><div class="item__description float-left">%description%</div><div class="right clearfix float-right"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="fa fa-times-circle animated fadeInLeft"></i></button></div></div><br/><div class="date_timestamp float-left"><cite>%date_timestamp%</cite></div></div>';
+
+			
+		} else if (type === 'exp'){
+			element = DOMstrings.expenseContainer;
+			html = '<div class="item clearfix animated fadeInLeft" id="exp-%id%"><div class="item__description float-left">%description%</div><div class="right clearfix float-right"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="fa fa-times-circle animated fadeInLeft"></i></button></div></div><br/><div class="date_timestamp float-left"><cite>%date_timestamp%</cite></div></div>';
+			
+		}
+
+		//Replace the placeholder text with some actual data
+		newHtml = html.replace('%id%', obj.id);
+		newHtml = newHtml.replace('%description%', obj.description);
+		newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
+		newHtml = newHtml.replace('%date_timestamp%', obj.timeStamp);	
+		
+		//Insert the html into the dom
+		document.querySelector(element).insertAdjacentHTML('afterend', newHtml);
+		}
+		
+
+
+	   },
+
+	   deleteListItem: function(selectorID){
+
+		var el = document.getElementById(selectorID);
+		el.classList.remove('fadeInLeft');
+		el.classList.add('fadeOutRight');
+
+		setTimeout( function(){
+			el.parentNode.removeChild(el);
+		}, 1000);
+		
+
+	   },
+
+	   clearFields: function(){
+		   var fields, fieldsArr;
+			
+		   fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValues);
+		   var fieldsArr = Array.prototype.slice.call(fields);
+
+		   fields.forEach(function(current, index, array){
+			current.value = "";
+		   });
+		   fieldsArr[0].focus();
+	   },
+
+	   displayBudget: function(obj) {
+		   var type;
+		   obj.budget > 0 ? type = 'inc' : type = 'exp';
+
+		   document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+		   document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
+		   document.querySelector(DOMstrings.expenseLabel).textContent = formatNumber(obj.totalExp, 'exp');
+		  
+		   if(obj.percentage > 0){
+			document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + '%';
+		   } else {
+			document.querySelector(DOMstrings.percentageLabel).textContent = '---';
+		   }
+		   
+	   },
+
+	   displayMonth : function(){
+		var now, months, month, year;
+
+		var now = new Date();
+		months = ['January', 'Februray', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		month = now.getMonth();
+		year = now.getFullYear();
+		function sortMonth(){
+			var m = month + 1;
+			m = m.toString();
+
+			if (m[1] !== undefined ){
+				return m;
+			} else {
+				return "0"+m;
+			}
+		}
+		datePicker.setAttribute('value', year+'-'+sortMonth());
+		datePicker.setAttribute('max', year+'-'+sortMonth());
+		budgetDataRef.on('value', function(snap){
+			var budgetData = snap.val();
+			var yearKeys = Object.keys(budgetData);
+			var yearLastKey = yearKeys[yearKeys.length - 1];
+			var monthKey = Object.keys(budgetData[yearLastKey]);
+			var monthLastKey = monthKey[monthKey.length - 1];
+			var monthObj = {
+				Jan: "01",
+				Feb: "02",
+				Mar: "03",
+				Apr: "04",
+				May: "05",
+				Jun: "06",
+				Jul: "07",
+				Aug: "08",
+				Sep: "09",
+				Oct: "10",
+				Nov: "11",
+				Dec: "12",
+			};
+		
+			datePicker.setAttribute('min', yearLastKey+'-'+monthObj[monthLastKey]);
+
+		});
+	   },
+
+	   dispplayPercentages: function(percentages){
+		   
+		var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
+		nodeListForEach(fields, function(current, index){
+			if(percentages[index] > 0){
+				current.textContent = percentages[index] + '%';
+			}else{
+				current.textContent = '---';
+			}
+
+		});
+
+	   },
+
+	   changedType: function(event){
+			 
+		 if (event.srcElement.id === "inc"){
+			
+			document.querySelector(DOMstrings.sumbitBtn).classList.add('btn-success');
+			document.getElementById('input__description').classList.add('green_desc');
+			document.getElementById('input__value').classList.add('green_val');
+			document.getElementById('input__description').classList.remove('red_desc');
+			document.getElementById('input__value').classList.remove('red_val');
+			
+	
+		 } else if (event.srcElement.id === "exp"){
+			
+			document.querySelector(DOMstrings.sumbitBtn).classList.remove('btn-success');
+			document.getElementById('input__description').classList.remove('green_desc');
+			document.getElementById('input__value').classList.remove('green_val');
+			
+			document.querySelector(DOMstrings.sumbitBtn).classList.add('btn-danger');
+			document.getElementById('input__description').classList.add('red_desc');
+			document.getElementById('input__value').classList.add('red_val');
+		  
+		 }
+	 
+
+		
+	   },
+
+	   getDOMstrings: function(){
+		   return DOMstrings;
+	   },
+
+	   // Charts / Graph
+
+		incPieChart: function(){
+			var localDB = budgetCtrl.returnLocalData();
+			var desc = []; 
+			var value = [];
+
+			desc = localDB.allItems['inc'].map(function(current){
+			   return '₹ ' + current.description;
+				
+			});
+			value = localDB.allItems['inc'].map(function(current){
+				return current.value;
+				 
+			 });
+
+			var pieCtx = document.getElementById("incPieChart").getContext('2d');
+			var incPieChart = new Chart (pieCtx, {
+				type: 'pie',
+				data: {
+					labels: desc,
+					datasets: [
+						{
+							data: value,
+							backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+							hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+						}
+					]
+				},
+				options: {
+					responsive: true
+				}
+			});
+		},
+
+		expPieChart: function(){
+
+			var localDB = budgetCtrl.returnLocalData();
+			var totalinc = localDB.totals.inc;
+			var desc = []; 
+			var value = [];
+			
+
+			desc = localDB.allItems['exp'].map(function(current){
+			   return '% ' + current.description;
+				
+			});
+			value = localDB.allItems['exp'].map(function(current){
+				return  Math.round((current.value / totalinc) * 100);
+				 
+			 });
+			 var test = document.getElementById("expPieChart");
+
+			var pieCtx = document.getElementById("expPieChart").getContext('2d');
+			var expPieChart = new Chart (pieCtx, {
+				type: 'pie',
+				data: {
+					labels: desc,
+					datasets: [
+						{
+							data: value,
+							backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+							hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+						}
+					]
+				},
+				options: {
+					responsive: true
+				}
+			});
+		},
+
+//Change Background Based on month
+		changeBg: function(month){
+			var bg, dropBoxKeys;
+			dropBoxKeys = {
+				Jan: "ogwlcw6kruu56bc",
+				Feb: "1beod5bv2dprgpx",
+				Mar: "5eiiwg5q1mj5jxd",
+				Apr: "nei2wyu6946o2wu",
+				May: "estgn5p8ytjwak7",
+				Jun: "0wokbum3f1fp96a",
+				Jul: "h70721gtx7wl3do",
+				Aug: "ej0h4e6nf4nguce",
+				Sep: "w201uoven7k4dg0",
+				Oct: "up3abjz29yxkjxl",
+				Nov: "xgqatwyqh3otw1c",
+				Dec: "x3e5um5z9awftai",
+			};
+			bg = document.querySelector('.top').style.backgroundImage = 'linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(https://www.dropbox.com/s/'+dropBoxKeys[month]+'/'+month+'.jpg?raw=1)';
+		}
+   };
+
+})(budgetController);
+
+
+// GLOBAL APP CONTROLLER
+var controller = (function(budgetCtrl, UICtrl, DBCtrl){
+
+	var setupEventListeners = function() {
+		var DOM = UICtrl.getDOMstrings();
+		
+		document.querySelector(DOM.sumbitBtn).addEventListener('click', ctrlAddItem);
+
+		document.addEventListener('keypress', function(event){
+			if(event.keyCode === 13 || event.which === 13){
+				ctrlAddItem();
+			}
+		});
+
+		document.getElementById(DOM.container).addEventListener('click', ctrlDeleteItem);
+		document.querySelector('.radio-group').addEventListener('click', UICtrl.changedType);
+		document.getElementById('inc-tab').addEventListener('click', UICtrl.incPieChart);
+		document.getElementById('exp-tab').addEventListener('click', UICtrl.expPieChart);
+		datePicker.onchange=dateEventHandler;
+	};
+
+	var updateBudget = function(){
+		//1. Calculate the budget
+		budgetCtrl.calculateBudget();
+
+		//2. Return budget
+		var budget = budgetCtrl.getBudget();
+
+		//3. Display the budget on the UI
+	   UICtrl.displayBudget(budget);
+	};
+
+	var updatePercentages = function(){
+		budgetCtrl.calculatePercentages();
+
+		var percentages = budgetCtrl.getPercentages();
+
+		UICtrl.dispplayPercentages(percentages);
+	};
+   
+	var ctrlAddItem = function(){
+		var input, newItem;
+		//1. Get the field input data
+		input = UICtrl.getInput();
+		
+		 if(input.description !== "" && !isNaN(input.value) && input.value > 0){
+			//2. Add the item to the budget controller
+			newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+
+			//3. Add the item to UI
+			UICtrl.addListItem(newItem, input.type);
+			UICtrl.clearFields();
+			
+			//4. Calculate and update budget
+			updateBudget();
+
+			updatePercentages();
+		 }
+		 
+		
+	};
+
+	var ctrlDeleteItem = function(event){
+		var itemID, splitID, type, ID;
+		itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
+		if(itemID){
+			splitID = itemID.split('-');
+			type = splitID[0];
+			ID = splitID[1];
+
+			//1.Delete item from data
+			budgetCtrl.deleteItem(type, ID);
+			//2.Delete item from UI
+			UICtrl.deleteListItem(itemID);
+			//3.Update and show the new budget
+			updateBudget();
+
+			updatePercentages();
+
+		}
+	};
+
+//Date change events
+	 var dateEventHandler = function(event) {
+		
+		var datePickerYear, datePickerMonth, dateValue, localDB, removeIncItems, removeExpItems ;
+		dateValue = event.target.value.split('-');
+		datePickerYear = parseInt(dateValue[0]);
+		datePickerMonth = parseInt(dateValue[1]);
+		datePickerMonth = months[datePickerMonth - 1];
+		
+		
+		if(datePickerYear !== year && datePickerMonth !== month){
+			year = datePickerYear;
+			month = datePickerMonth;
+			
+			budgetRef = db.ref('budget_data/'+year+'/'+month);
+			incRef = db.ref('budget_data/'+year+'/'+month+'/inc');
+			expRef = db.ref('budget_data/'+year+'/'+month+'/exp');
+			localDB = budgetCtrl.returnLocalData();
+			
+			removeIncItems = localDB.allItems['inc'].map(function(current){
+				UICtrl.deleteListItem("inc-"+current.id);  
+			});
+			removeExpItems = localDB.allItems['exp'].map(function(current){
+				UICtrl.deleteListItem("exp-"+current.id);  
+			});
+
+			budgetCtrl.resetLocalData();
+			UICtrl.changeBg(datePickerMonth);
+			controller.init();
+			
+		} else if( datePickerYear === year && datePickerMonth !== month ){
+			
+			month = datePickerMonth;
+			budgetRef = db.ref('budget_data/'+year+'/'+month);
+			incRef = db.ref('budget_data/'+year+'/'+month+'/inc');
+			expRef = db.ref('budget_data/'+year+'/'+month+'/exp');
+			localDB = budgetCtrl.returnLocalData();
+			
+			removeIncItems = localDB.allItems['inc'].map(function(current){
+				UICtrl.deleteListItem("inc-"+current.id);  
+			});
+			removeExpItems = localDB.allItems['exp'].map(function(current){
+				UICtrl.deleteListItem("exp-"+current.id);  
+			});
+
+			budgetCtrl.resetLocalData();
+			UICtrl.changeBg(datePickerMonth);
+			controller.init();
+		} else if(datePickerYear !== year && datePickerMonth === month) {
+			year = datePickerYear;
+
+			budgetRef = db.ref('budget_data/'+year+'/'+month);
+			incRef = db.ref('budget_data/'+year+'/'+month+'/inc');
+			expRef = db.ref('budget_data/'+year+'/'+month+'/exp');
+			localDB = budgetCtrl.returnLocalData();
+			
+			removeIncItems = localDB.allItems['inc'].map(function(current){
+				UICtrl.deleteListItem("inc-"+current.id);  
+			});
+			removeExpItems = localDB.allItems['exp'].map(function(current){
+				UICtrl.deleteListItem("exp-"+current.id);  
+			});
+
+			budgetCtrl.resetLocalData();
+			UICtrl.changeBg(month);
+			controller.init();
+		} else if (datePickerYear === year && datePickerMonth === month){
+			budgetRef = db.ref('budget_data/'+year+'/'+month);
+			incRef = db.ref('budget_data/'+year+'/'+month+'/inc');
+			expRef = db.ref('budget_data/'+year+'/'+month+'/exp');
+			localDB = budgetCtrl.returnLocalData();
+			
+			removeIncItems = localDB.allItems['inc'].map(function(current){
+				UICtrl.deleteListItem("inc-"+current.id);  
+			});
+			removeExpItems = localDB.allItems['exp'].map(function(current){
+				UICtrl.deleteListItem("exp-"+current.id);  
+			});
+
+			budgetCtrl.resetLocalData();
+			UICtrl.changeBg(month);
+			controller.init();
+		}
+	};
+
+//DataBase Listners
+	var activateDBlisteners = function(){
+		
+		incRef.on('value', function(incSnap){ 
+			var incData = incSnap.val();
+			var localDB = budgetCtrl.returnLocalData();
+			var localID;
+			var fbID = [];
+			var fbKeys;
+			var index;
+
+			if(incData != null){
+				
+				var keys = Object.keys(incData);
+
+				localID = localDB.allItems['inc'].map(function(current){
+					return current.id;
+					
+				});
+
+				for(var i = 0; i < keys.length; i++){
+					fbID.push(incData[keys[i]].id);
+				
+				}
+				if(keys.length > localID.length){
+					
+					for(var i = 0; i < keys.length; i++){
+				   
+						index = localID.indexOf(incData[keys[i]].id);
+						
+						if(index === -1){
+							budgetCtrl.addNewItemToDB('inc', incData[keys[i]]);
+	
+						} 
+					
+					}
+				}
+				 else if (localID.length > keys.length){
+					
+					
+					for(var j = 0; j < localID.length; j++){
+						index = fbID.indexOf(localID[j]);  
+						if(index === -1){
+							
+							budgetCtrl.deleteItemFromDB('inc', localID[j]);
+							
+						}
+					   
+					}
+				}
+				
+			} else {
+				localID = localDB.allItems['inc'].map(function(current){
+					return current.id;
+					
+				});
+		
+				
+				if(localID.length === 1){
+					budgetCtrl.deleteItemFromDB('inc', localID[0]);
+					
+				 } 
+				
+			}
+		});
+	
+		expRef.on('value', function(expSnap){
+			var expData = expSnap.val();
+			var localDB = budgetCtrl.returnLocalData();
+			var localID;
+			var fbID = [];
+			var fbKeys;
+			var index;
+
+			if(expData != null){
+				
+				var keys = Object.keys(expData);
+
+				localID = localDB.allItems['exp'].map(function(current){
+					return current.id;
+					
+				});
+
+				for(var i = 0; i < keys.length; i++){
+					fbID.push(expData[keys[i]].id);
+				}
+				if(keys.length > localID.length){
+					
+					for(var i = 0; i < keys.length; i++){
+				   
+						index = localID.indexOf(expData[keys[i]].id);
+						
+						if(index === -1){
+							budgetCtrl.addNewItemToDB('exp', expData[keys[i]]);
+	
+						} 
+					
+					}
+				}
+				 else if (localID.length > keys.length){
+					
+					
+					for(var j = 0; j < localID.length; j++){
+						index = fbID.indexOf(localID[j]);  
+						if(index === -1){
+							budgetCtrl.deleteItemFromDB('exp', localID[j]);
+							
+						}
+					   
+					}
+				}
+				
+			} else {
+				localID = localDB.allItems['exp'].map(function(current){
+					return current.id;
+					
+				});
+		
+				
+				if(localID.length === 1){
+					budgetCtrl.deleteItemFromDB('exp', localID[0]);
+					
+				 } 
+				
+			}
+		});
+	};
+
+	return {
+		
+		init: function(){
+			UIController.createLoader();
+			UICtrl.displayMonth();
+			setupEventListeners();
+			updateBudget();
+			updatePercentages();
+			setTimeout(function(){
+			activateDBlisteners();
+			UIController.dismissLoader();
+			}, 3000);
+			
+		},
+		updateNumbers: function(){
+			updateBudget();
+			updatePercentages(); 
+			
+		}
+	};   
+})(budgetController, UIController);
+controller.init();
+UIController.changeBg(month);
+});
+    </script>
+	<!-- Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+	<!-- JQuery -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<!-- MDB core JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
+	</body>
+</html>
